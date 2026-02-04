@@ -1,0 +1,265 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme CSS Variables */
+:root {
+  /* Light Theme Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --border-color: #e2e8f0;
+  --card-bg: #ffffff;
+  --card-hover: #f8fafc;
+  --shadow: rgba(15, 23, 42, 0.08);
+  --shadow-hover: rgba(15, 23, 42, 0.12);
+  --toggle-bg: #0f172a;
+  --toggle-color: #ffffff;
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --input-focus: #0ea5e9;
+  --button-bg: #0ea5e9;
+  --button-hover: #0284c7;
+  --rating-bg: #fef3c7;
+  --rating-text: #92400e;
+  --error-bg: #fef2f2;
+  --error-text: #991b1b;
+}
+
+[data-theme="dark"] {
+  /* Dark Theme Colors */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --border-color: #334155;
+  --card-bg: #1e293b;
+  --card-hover: #334155;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-hover: rgba(0, 0, 0, 0.5);
+  --toggle-bg: #f1f5f9;
+  --toggle-color: #0f172a;
+  --input-bg: #1e293b;
+  --input-border: #475569;
+  --input-focus: #38bdf8;
+  --button-bg: #0ea5e9;
+  --button-hover: #38bdf8;
+  --rating-bg: #422006;
+  --rating-text: #fef3c7;
+  --error-bg: #450a0a;
+  --error-text: #fecaca;
+}
+
+/* Global styles and custom utilities */
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    @apply min-h-screen transition-colors duration-300;
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+}
+
+@layer components {
+  /* App Container */
+  .app {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    @apply min-h-screen transition-colors duration-300;
+  }
+
+  /* Movie Card Styles */
+  .movie-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px var(--shadow);
+    @apply transition-all duration-300 hover:scale-105 rounded-lg overflow-hidden;
+  }
+
+  .movie-card:hover {
+    box-shadow: 0 8px 16px var(--shadow-hover);
+    background-color: var(--card-hover);
+  }
+
+  .movie-title {
+    color: var(--text-primary);
+  }
+
+  .movie-overview {
+    color: var(--text-secondary);
+  }
+
+  .movie-meta {
+    color: var(--text-tertiary);
+  }
+
+  /* Button Styles */
+  .btn-primary {
+    background-color: var(--button-bg);
+    color: #ffffff;
+    @apply font-semibold py-2 px-4 rounded-lg transition-all duration-200 hover:shadow-lg;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    @apply font-semibold py-2 px-4 rounded-lg transition-all duration-200;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--bg-tertiary);
+  }
+
+  /* Input Styles */
+  .search-input {
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    border: 2px solid var(--input-border);
+    @apply rounded-lg px-4 py-3 transition-all duration-200;
+  }
+
+  .search-input:focus {
+    border-color: var(--input-focus);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  }
+
+  .search-input::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  /* Pagination Styles */
+  .pagination-button {
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    @apply px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-md;
+  }
+
+  .pagination-button:hover:not(:disabled) {
+    background-color: var(--card-hover);
+    border-color: var(--input-focus);
+  }
+
+  .pagination-button.active {
+    background-color: var(--button-bg);
+    color: #ffffff;
+    border-color: var(--button-bg);
+  }
+
+  .pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Rating Badge */
+  .rating-badge {
+    background-color: var(--rating-bg);
+    color: var(--rating-text);
+    @apply px-3 py-1 rounded-full text-sm font-semibold;
+  }
+
+  /* Error/Info Messages */
+  .error-message {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border: 1px solid var(--error-text);
+    @apply p-4 rounded-lg;
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    border-color: var(--border-color);
+    border-top-color: var(--button-bg);
+  }
+
+  /* Container Backgrounds */
+  .container-primary {
+    background-color: var(--bg-primary);
+  }
+
+  .container-secondary {
+    background-color: var(--bg-secondary);
+  }
+
+  /* Text Colors */
+  .text-primary {
+    color: var(--text-primary);
+  }
+
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .text-tertiary {
+    color: var(--text-tertiary);
+  }
+
+  /* Border Color */
+  .border-theme {
+    border-color: var(--border-color);
+  }
+
+  /* Genre Filter Chips */
+  .genre-chip {
+    background-color: var(--card-bg);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:shadow-md;
+  }
+
+  .genre-chip:hover:not(:disabled) {
+    background-color: var(--card-hover);
+    border-color: var(--input-focus);
+    color: var(--text-primary);
+  }
+
+  .genre-chip.active {
+    background-color: var(--button-bg);
+    color: #ffffff;
+    border-color: var(--button-bg);
+  }
+
+  .genre-chip:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Favorite Button */
+  .favorite-button {
+    @apply p-2 rounded-full transition-all duration-200;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  .favorite-button:hover {
+    transform: scale(1.1);
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .favorite-button.favorited {
+    color: #ef4444;
+  }
+
+  .favorite-button:not(.favorited) {
+    color: #ffffff;
+  }
+}
