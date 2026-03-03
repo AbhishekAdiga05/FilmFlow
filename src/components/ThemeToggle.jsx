@@ -13,7 +13,6 @@ const ThemeToggle = () => {
       title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >
       {theme === "light" ? (
-        // Moon icon for dark mode
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -28,7 +27,6 @@ const ThemeToggle = () => {
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       ) : (
-        // Sun icon for light mode
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"

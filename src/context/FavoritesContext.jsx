@@ -17,7 +17,6 @@ const FavoritesContext = createContext();
 export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
 
-  // Load favorites from localStorage on mount
   useEffect(() => {
     const savedFavorites = localStorage.getItem("movieFavorites");
     if (savedFavorites) {
@@ -30,18 +29,12 @@ export const FavoritesProvider = ({ children }) => {
     }
   }, []);
 
-  // Save favorites to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("movieFavorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  /**
-   * Add a movie to favorites
-   * @param {Object} movie - Movie object to add
-   */
   const addFavorite = (movie) => {
     setFavorites((prev) => {
-      // Prevent duplicates
       if (prev.some((fav) => fav.id === movie.id)) {
         return prev;
       }
@@ -49,18 +42,10 @@ export const FavoritesProvider = ({ children }) => {
     });
   };
 
-  /**
-   * Remove a movie from favorites
-   * @param {number} movieId - ID of movie to remove
-   */
   const removeFavorite = (movieId) => {
     setFavorites((prev) => prev.filter((movie) => movie.id !== movieId));
   };
 
-  /**
-   * Toggle movie favorite status
-   * @param {Object} movie - Movie object to toggle
-   */
   const toggleFavorite = (movie) => {
     if (isFavorite(movie.id)) {
       removeFavorite(movie.id);
@@ -69,18 +54,10 @@ export const FavoritesProvider = ({ children }) => {
     }
   };
 
-  /**
-   * Check if a movie is in favorites
-   * @param {number} movieId - ID of movie to check
-   * @returns {boolean}
-   */
   const isFavorite = (movieId) => {
     return favorites.some((movie) => movie.id === movieId);
   };
 
-  /**
-   * Clear all favorites
-   */
   const clearFavorites = () => {
     setFavorites([]);
   };

@@ -5,52 +5,16 @@ import MovieCard from "./MovieCard";
 import ThemeToggle from "./ThemeToggle";
 import { useFavorites } from "../context/FavoritesContext";
 
-/**
- * MovieDetails Component
- *
- * Displays complete information about a single movie:
- * - Large poster image
- * - Title, release date, rating
- * - Overview/description
- * - Genres
- * - Runtime, budget, revenue
- * - Production companies
- * - Cast information (if available)
- * - Similar movies
- * - Movie trailer/video (if available)
- *
- * Features:
- * - Fetches detailed movie data on mount
- * - Loading state while fetching
- * - Error handling if movie not found
- * - Back button to return to list
- * - Responsive layout for mobile/desktop
- * - Similar movies section at bottom
- *
- * Uses useParams to get movie ID from URL
- * Uses useNavigate for programmatic navigation
- */
-
 const MovieDetails = () => {
-  // Get movie ID from URL parameters
-  // Example: /movie/123 -> movieId = "123"
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Favorites context
   const { isFavorite, toggleFavorite } = useFavorites();
 
-  // State management
-  const [movie, setMovie] = useState(null); // Movie details object
-  const [loading, setLoading] = useState(true); // Loading indicator
-  const [error, setError] = useState(null); // Error message
+  const [movie, setMovie] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  /**
-   * Fetch movie details when component mounts or movie ID changes
-   *
-   * useEffect runs after component renders
-   * Dependencies: [id] - runs when ID changes
-   */
   useEffect(() => {
     const fetchMovieDetails = async () => {
       if (!id) {
@@ -63,7 +27,6 @@ const MovieDetails = () => {
       setError(null);
 
       try {
-        // Fetch movie details from API
         const data = await getMovieDetails(id);
         setMovie(data);
       } catch (err) {
@@ -74,17 +37,8 @@ const MovieDetails = () => {
     };
 
     fetchMovieDetails();
-  }, [id]); // Re-fetch if ID changes
+  }, [id]);
 
-  /**
-   * Format runtime to readable format
-   *
-   * Converts minutes to "Xh Ym" format
-   * Example: 125 -> "2h 5m"
-   *
-   * @param {number} minutes - Runtime in minutes
-   * @returns {string} Formatted runtime
-   */
   const formatRuntime = (minutes) => {
     if (!minutes) return "N/A";
     const hours = Math.floor(minutes / 60);
@@ -92,15 +46,6 @@ const MovieDetails = () => {
     return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
   };
 
-  /**
-   * Format currency to readable format
-   *
-   * Converts large numbers to "X.XM" or "X.XB" format
-   * Example: 1000000 -> "$1.0M"
-   *
-   * @param {number} amount - Amount to format
-   * @returns {string} Formatted currency string
-   */
   const formatCurrency = (amount) => {
     if (!amount) return "N/A";
     if (amount >= 1_000_000_000) {
@@ -112,12 +57,6 @@ const MovieDetails = () => {
     return `$${amount.toLocaleString()}`;
   };
 
-  /**
-   * Format date to readable format
-   *
-   * @param {string} dateString - Date string from API
-   * @returns {string} Formatted date
-   */
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     try {
@@ -132,13 +71,6 @@ const MovieDetails = () => {
     }
   };
 
-  /**
-   * Get rating color based on score
-   * Same logic as MovieCard component
-   *
-   * @param {number} rating - Vote average (0-10)
-   * @returns {string} Tailwind CSS color class
-   */
   const getRatingColor = (rating) => {
     if (!rating) return "bg-gray-600";
     const percentage = rating * 10;
@@ -147,7 +79,6 @@ const MovieDetails = () => {
     return "bg-red-600";
   };
 
-  // Loading State
   if (loading) {
     return (
       <div className="container-primary min-h-screen flex items-center justify-center">
@@ -159,7 +90,6 @@ const MovieDetails = () => {
     );
   }
 
-  // Error State
   if (error || !movie) {
     return (
       <div className="container-primary min-h-screen flex items-center justify-center px-4">
@@ -194,22 +124,18 @@ const MovieDetails = () => {
     );
   }
 
-  // Get poster and backdrop images
   const posterUrl = getImageUrl(movie.poster_path, "w500");
   const backdropUrl = getImageUrl(movie.backdrop_path, "w1280");
 
-  // Find the official trailer from the videos array
   const trailer = movie.videos?.results?.find(
     (video) => video.site === "YouTube" && video.type === "Trailer",
   );
 
   return (
     <div className="container-primary min-h-screen">
-      {/* Navbar */}
       <nav className="container-secondary border-b border-theme">
         <div className="container mx-auto px-4 py-4 max-w-7xl">
           <div className="flex items-center justify-between">
-            {/* Back Button */}
             <button
               onClick={() => navigate(-1)}
               className="text-secondary flex items-center transition-colors hover:text-primary"
@@ -231,18 +157,15 @@ const MovieDetails = () => {
               Back
             </button>
 
-            {/* Movie Title (centered) */}
             <h1 className="text-xl font-bold text-primary absolute left-1/2 transform -translate-x-1/2">
               🎬 Movie Details
             </h1>
 
-            {/* Theme Toggle */}
             <ThemeToggle />
           </div>
         </div>
       </nav>
 
-      {/* Backdrop Image with Overlay */}
       {movie.backdrop_path && (
         <div className="relative h-64 md:h-96 overflow-hidden">
           <img
@@ -254,11 +177,8 @@ const MovieDetails = () => {
         </div>
       )}
 
-      {/* Main Content */}
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Movie Info Section */}
         <div className="flex flex-col lg:flex-row gap-8 mb-8">
-          {/* Poster Image */}
           <div className="flex-shrink-0 w-full lg:w-80">
             <img
               src={posterUrl}
@@ -271,9 +191,7 @@ const MovieDetails = () => {
             />
           </div>
 
-          {/* Movie Details */}
           <div className="flex-1">
-            {/* Title, Rating, and Favorite Button */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
               <h1 className="text-primary text-3xl md:text-4xl font-bold flex-1">
                 {movie.title}
@@ -286,7 +204,6 @@ const MovieDetails = () => {
                 >
                   {Math.round(movie.vote_average * 10)}%
                 </div>
-                {/* Favorite Button */}
                 <button
                   onClick={() => toggleFavorite(movie)}
                   className={`btn-secondary px-6 py-3 flex items-center gap-2 ${
@@ -319,13 +236,12 @@ const MovieDetails = () => {
                   {isFavorite(movie.id) ? "In Watchlist" : "Add to Watchlist"}
                 </button>
 
-                {/* Watch Trailer Button */}
                 {trailer && (
                   <a
                     href={`https://www.youtube.com/watch?v=${trailer.key}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary px-6 py-3 flex items-center gap-2"
+                    className="btn-primary px-6 py-3 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -346,7 +262,6 @@ const MovieDetails = () => {
               </div>
             </div>
 
-            {/* Release Date and Runtime */}
             <div className="flex flex-wrap items-center gap-4 text-secondary mb-6">
               <span>{formatDate(movie.release_date)}</span>
               {movie.runtime && (
@@ -363,7 +278,6 @@ const MovieDetails = () => {
               )}
             </div>
 
-            {/* Overview */}
             {movie.overview && (
               <div className="mb-6">
                 <h2 className="text-xl font-bold text-primary mb-2">
@@ -375,7 +289,6 @@ const MovieDetails = () => {
               </div>
             )}
 
-            {/* Movie Stats */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <div className="container-secondary rounded-lg p-4 border border-theme">
                 <p className="text-tertiary text-sm mb-1">Budget</p>
@@ -397,7 +310,6 @@ const MovieDetails = () => {
               </div>
             </div>
 
-            {/* Production Companies */}
             {movie.production_companies &&
               movie.production_companies.length > 0 && (
                 <div className="mb-6">
@@ -417,14 +329,13 @@ const MovieDetails = () => {
                 </div>
               )}
 
-            {/* Trailer Button */}
             {trailer && (
               <div>
                 <a
                   href={`https://www.youtube.com/watch?v=${trailer.key}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center btn-primary px-6 py-3"
+                  className="inline-flex items-center btn-primary px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   <svg
                     className="w-5 h-5 mr-2"
@@ -440,7 +351,6 @@ const MovieDetails = () => {
           </div>
         </div>
 
-        {/* Similar Movies Section */}
         {movie.similar &&
           movie.similar.results &&
           movie.similar.results.length > 0 && (
