@@ -109,11 +109,9 @@ export const searchMovies = async (query, page = 1) => {
  */
 export const getMovieDetails = async (movieId) => {
   try {
-    // Fetch movie details with additional append_to_response parameters
-    // to get videos and similar movies in one request
     const response = await apiClient.get(`/movie/${movieId}`, {
       params: {
-        append_to_response: "videos,similar",
+        append_to_response: "videos",
       },
     });
     return response.data;
@@ -123,16 +121,12 @@ export const getMovieDetails = async (movieId) => {
 };
 
 /**
- * Get popular movies (trending movies on TMDB)
+ * Get a list of popular movies
  *
  * @param {number} page - Page number for pagination (default: 1)
- * @returns {Promise} Promise that resolves to popular movies list
+ * @returns {Promise} Promise that resolves to a list of popular movies
  *
  * API Endpoint: GET /movie/popular
- * Returns: Paginated list of popular movies
- *
- * This endpoint returns movies that are currently popular on TMDB.
- * Useful as default content when no search query is provided.
  */
 export const getPopularMovies = async (page = 1) => {
   try {
@@ -148,13 +142,12 @@ export const getPopularMovies = async (page = 1) => {
 };
 
 /**
- * Get top rated movies
+ * Get a list of top-rated movies
  *
  * @param {number} page - Page number for pagination (default: 1)
- * @returns {Promise} Promise that resolves to top rated movies
+ * @returns {Promise} Promise that resolves to a list of top-rated movies
  *
  * API Endpoint: GET /movie/top_rated
- * Returns: Paginated list of top rated movies
  */
 export const getTopRatedMovies = async (page = 1) => {
   try {
@@ -165,7 +158,24 @@ export const getTopRatedMovies = async (page = 1) => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(`Failed to get top rated movies: ${error.message}`);
+    throw new Error(`Failed to get top-rated movies: ${error.message}`);
+  }
+};
+
+/**
+ * Get movie recommendations for a specific movie
+ *
+ * @param {number} movieId - The TMDB movie ID
+ * @returns {Promise} Promise that resolves to a list of recommended movies
+ *
+ * API Endpoint: GET /movie/{movie_id}/recommendations
+ */
+export const getRecommendedMovies = async (movieId) => {
+  try {
+    const response = await apiClient.get(`/movie/${movieId}/recommendations`);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Failed to get recommended movies: ${error.message}`);
   }
 };
 

@@ -6,6 +6,7 @@ import ThemeToggle from "../components/ThemeToggle";
 import GenreFilter from "../components/GenreFilter";
 import { useFavorites } from "../context/FavoritesContext";
 import MovieCard from "../components/MovieCard";
+import { getRecommendedMovies } from "../services/api";
 
 /**
  * Home Page Component
@@ -29,6 +30,24 @@ import MovieCard from "../components/MovieCard";
 const Home = () => {
   const { favorites, favoritesCount } = useFavorites();
   const [showFavorites, setShowFavorites] = useState(false);
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
+
+  React.useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        if (favorites.length > 0) {
+          const recommended = await getRecommendedMovies(favorites[0].id);
+          setRecommendedMovies(recommended.results);
+        } else {
+          setRecommendedMovies([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch movies:", error);
+      }
+    };
+
+    fetchMovies();
+  }, [favorites]);
 
   return (
     <div className="container-primary min-h-screen">
@@ -39,9 +58,7 @@ const Home = () => {
           <div className="flex items-center justify-between mb-6">
             <div className="flex-1"></div>
             <div className="flex-1 flex justify-center">
-              <h1 className="text-4xl font-bold text-primary">
-                🎬 FilmFlow
-              </h1>
+              <h1 className="text-4xl font-bold text-primary">🎬 FilmFlow</h1>
             </div>
             <div className="flex-1 flex justify-end">
               <ThemeToggle />
@@ -138,13 +155,22 @@ const Home = () => {
         ) : (
           /* All Movies View */
           <>
-            {/* Genre Filter */}
+            {/* Recommended Movies Section */}
+            {recommendedMovies.length > 0 && (
+              <div className="mb-12">
+                <h2 className="text-2xl font-bold text-primary mb-6">
+                  Recommended for You
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                  {recommendedMovies.slice(0, 5).map((movie) => (
+                    <MovieCard key={movie.id} movie={movie} />
+                  ))}
+                </div>
+              </div>
+            )}
+
             <GenreFilter />
-
-            {/* Movie List */}
             <MovieList />
-
-            {/* Pagination */}
             <Pagination />
           </>
         )}
