@@ -8,25 +8,6 @@ import { useFavorites } from "../context/FavoritesContext";
 import MovieCard from "../components/MovieCard";
 import { getRecommendedMovies } from "../services/api";
 
-/**
- * Home Page Component
- *
- * This is the main landing page of the application.
- * It displays:
- * - Search bar for finding movies
- * - List of movies (either search results or popular movies)
- * - Pagination controls for navigating through pages
- *
- * Layout:
- * - Header section with search
- * - Main content area with movie grid
- * - Footer section with pagination
- *
- * This page uses the MovieContext for state management.
- * All components (SearchBar, MovieList, Pagination) consume
- * the same context, ensuring they stay in sync.
- */
-
 const Home = () => {
   const { favorites, favoritesCount } = useFavorites();
   const [showFavorites, setShowFavorites] = useState(false);
@@ -51,10 +32,8 @@ const Home = () => {
 
   return (
     <div className="container-primary min-h-screen">
-      {/* Header Section */}
       <header className="container-secondary border-b border-theme py-8">
         <div className="container mx-auto px-4 max-w-7xl">
-          {/* Navbar with Title and Theme Toggle */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex-1"></div>
             <div className="flex-1 flex justify-center">
@@ -68,10 +47,8 @@ const Home = () => {
             Discover your next favorite film
           </p>
 
-          {/* Search Bar */}
           <SearchBar />
 
-          {/* View Toggle: All Movies / Favorites */}
           <div className="flex justify-center gap-3 mt-6">
             <button
               onClick={() => setShowFavorites(false)}
@@ -106,10 +83,8 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {showFavorites ? (
-          /* Favorites View */
           <div>
             <h2 className="text-2xl font-bold text-primary mb-6">
               Your Watchlist
@@ -153,9 +128,7 @@ const Home = () => {
             )}
           </div>
         ) : (
-          /* All Movies View */
           <>
-            {/* Recommended Movies Section */}
             {recommendedMovies.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-primary mb-6">
@@ -176,7 +149,6 @@ const Home = () => {
         )}
       </main>
 
-      {/* Footer */}
       <footer className="container-secondary border-t border-theme py-6 mt-12">
         <div className="container mx-auto px-4 max-w-7xl text-center text-tertiary text-sm">
           <p>
